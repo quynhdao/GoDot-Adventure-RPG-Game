@@ -7,7 +7,6 @@ var HP = 100
 var def = 10
 var dmg = 60
 
-
 var maxHP = 100
 
 var motion = Vector2()
@@ -64,10 +63,23 @@ func _ready():
 
 
 func appear(anim): #appear when added to area
-	show()
 	playerMovable = true
-
-
+	show()
+	play_animation("spawning")
+	if $CollisionShape2D.disabled == true:
+		$CollisionShape2D.disabled = false
+		$AttackRay/CollisionShape2D.disabled = false
+	$AttackRay.set("monitoring", true)
+	set_collision_layer_bit(2, true)
+	
+func temp_disable():
+	playerMovable = false
+	$CollisionShape2D.disabled = true
+	$AttackRay/CollisionShape2D.disabled = true
+	hide()
+	$AttackRay.set("monitoring", false)
+	set_collision_layer_bit(2, false)
+	
 func _input(event):
 	if event.is_action_pressed("space"):
 		flip_coin()

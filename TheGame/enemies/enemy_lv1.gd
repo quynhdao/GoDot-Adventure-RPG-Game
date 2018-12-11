@@ -37,6 +37,7 @@ func _ready():
 	
 #set init value for enemyp
 func init():
+	$AttackIcon.hide()
 	var random_index = floor(rand_range(0, 3))
 	type = enemies_type[random_index]
 	match type:
@@ -102,6 +103,7 @@ func conn_signals():
 	
 func target_enter(body):
 	if "player" in body.get_name():
+		$AttackIcon.show()
 		target = body
 		$FlipTimer.set_paused(true)
 		$lifeBarContainer.show_bar()
@@ -110,6 +112,7 @@ func target_enter(body):
 		
 func target_exit(body):
 	if "player" in body.get_name():
+		$AttackIcon.hide()
 		target = null
 		playerInZone = false
 		$lifeBarContainer.hide_bar()
@@ -184,7 +187,6 @@ func dead():
 	dead = true
 	$FlipTimer.stop()
 	$enemySprite.animation = "die"
-	$Anim.play("dead")
 	if has_node("Area2D/detectZone"):
 		$Area2D/detectZone.disabled = true
 	if has_node("CollisionShape2D"):
@@ -193,6 +195,7 @@ func dead():
 	pass
 	
 func enemy_disable():
+	$Anim.play("dead")
 	if $enemySprite.is_inside_tree():
 		$enemySprite.hide()
 	$lifeBarContainer.hide()
